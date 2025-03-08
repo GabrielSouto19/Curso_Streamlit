@@ -1,0 +1,3 @@
+[theme]
+# caso necessário podemos colocar o projeto pra rodar nativamente em modo light ou dark 
+base="dark"
