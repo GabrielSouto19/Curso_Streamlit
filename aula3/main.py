@@ -1,6 +1,8 @@
 import streamlit as st 
 import pandas as pd
 import yfinance as yf
+from datetime import timedelta
+
 
 @st.cache_data
 def carregar_dados(empresas):
@@ -13,8 +15,6 @@ def carregar_dados(empresas):
 
     return cotacoes_acao
 
-
-
 acoes = ["ITUB4.SA","PETR4.SA","MGLU3.SA","VALE3.SA","ABEV3.SA","GGBR4.SA"]
 dados = carregar_dados(acoes)
 # todas as ações que terminam com SA , são da bolsa brasileira
@@ -23,7 +23,6 @@ dados = carregar_dados(acoes)
 st.write("# Meu sistema de correlação de ações")
 
 st.sidebar.header("Filtros")
-
 
 # Filtro de ações
 lista_acoes = st.multiselect("Selecione as ações que deseja aplicar o filtro",dados.columns)
@@ -40,8 +39,12 @@ data_final = dados.index.max().to_pydatetime()
 print(data_inicial)
 print(data_final)
 
-intervalo_datas = st.sidebar.slider("Selecione o período",min_value=data_inicial,max_value=data_final,value=(data_inicial,data_final))
+intervalo_datas = st.sidebar.slider("Selecione o período",min_value=data_inicial,max_value=data_final,value=(data_inicial,data_final),step=timedelta(days=15))
 
 
+dados = dados.loc[intervalo_datas[0]:intervalo_datas[1]]
+
+
+print(dados)
 st.line_chart(dados)
 st.write("# Fim do meu programa")
